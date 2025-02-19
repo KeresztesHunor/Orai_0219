@@ -1,25 +1,27 @@
 ﻿namespace Orai_0219
 {
-    internal class Muvelet(float x, float y, char muvelet)
+    internal struct Muvelet(float x, float y)
     {
         float x { get; } = x;
         float y { get; } = y;
         float? eredmeny { get; set; } = null;
-        public float Eredmeny => eredmeny ??= muvelet(x, y);
 
-        Func<float, float, float> muvelet { get; } = muvelet switch {
-            '+' => (float x, float y) => x + y,
-            '-' => (float x, float y) => x - y,
-            '*' => (float x, float y) => x * y,
-            '/' => (float x, float y) => x / y,
-            _ => throw new ArgumentException($"A \"{muvelet}\" karakter nem egy valid operátor!")
-        };
+        public float Eredmeny => eredmeny ?? throw new InvalidOperationException("A művelet nem lett még végrehajtva!");
 
-        public void Kiszamol()
+        public void Kiszamol(char muvelet)
         {
-            eredmeny = muvelet(x, y);
+            eredmeny = muvelet switch {
+                '+' => x + y,
+                '-' => x - y,
+                '*' => x * y,
+                '/' => x / y,
+                _ => throw new ArgumentException($"A(z) \"{muvelet}\" karakter nem egy valid operátor!")
+            };
         }
 
-        public override string ToString() => $"Eredmény: {Eredmeny}";
+        public void EredmenytKiir()
+        {
+            Console.WriteLine("Eredmény: " + Eredmeny);
+        }
     }
 }
